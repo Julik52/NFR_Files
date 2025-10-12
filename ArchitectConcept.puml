@@ -1,0 +1,53 @@
+@startuml
+title UML-діаграма розгортання ПП з IoT
+
+' --- Глобальні налаштування стилю та напрямку ---
+left to right direction
+skinparam componentStyle uml1
+skinparam rectangle {
+  shadowing false
+}
+
+' --- Зовнішні пристрої та IoT ---
+interface "Сенсорний екран" as Touchscreen
+interface "Мікрофон" as Mic
+node "<<Датчик температури>>" as IoTSensor {
+  artifact "<<ESP32/ESP8266>>"
+}
+node "<<Смартфон>>" as Phone {
+  node "<<OC Android>>" as AndroidOS {
+    artifact "<<Додаток *.apk>>\n(Kotlin, Android Studio)" as App
+  }
+}
+
+node "<<Сервер 1>>\n(Server 1)" as AppServer {
+  node "<<OC Linux>>" as ServerOS_BL {
+    artifact "<<Application Server>>\n(Node.js)" as Backend {
+      artifact "*.js"
+    }
+  }
+}
+
+node "<<Сервер 2>>\n(Server 2)" as DBServer {
+  node "<<OC Linux>>" as ServerOS_AL {
+    node "<<Database Server>>\n(PostgreSQL)" as DB {
+      artifact "JSON" as JSON
+      database "Relation database"
+    }
+  }
+}
+
+' --- З'єднання ---
+Touchscreen -- Phone
+Mic -- Phone
+
+' Зв'язок IoT датчика з сервером
+DBServer -- IoTSensor : <<Дані (MQTT)>>
+
+' Зв'язок клієнта з сервером
+Phone -- AppServer : <<Керування (API)>>
+
+' Зв'язок сервера з базою даних
+AppServer -- DBServer : <<DB Connection>>
+
+@enduml
