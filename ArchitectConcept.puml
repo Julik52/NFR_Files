@@ -42,7 +42,7 @@ Touchscreen -- Phone
 Mic -- Phone
 
 ' Зв'язок IoT датчика з сервером
-DBServer -- IoTSensor : <<Дані (MQTT)>>
+IoTSensor -- AppServer : <<Дані (MQTT)>>
 
 ' Зв'язок клієнта з сервером
 Phone -- AppServer : <<Керування (API)>>
