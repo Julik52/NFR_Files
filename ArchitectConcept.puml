@@ -31,7 +31,6 @@ node "<<Сервер 1>>\n(Server 1)" as AppServer {
 node "<<Сервер 2>>\n(Server 2)" as DBServer {
   node "<<OC Linux>>" as ServerOS_AL {
     node "<<Database Server>>\n(PostgreSQL)" as DB {
-      artifact "JSON" as JSON
       database "Relation database"
     }
   }
