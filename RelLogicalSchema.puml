@@ -13,7 +13,7 @@ entity "**User**" as user {
   last_login : TIMESTAMP
 }
 
-entity "**Monitoring**" as monitoring {
+entity "**Monitorings**" as monitoring {
   (PK) monitoring_id : INTEGER
   --
   monitoring_name : VARCHAR(100)
@@ -76,7 +76,7 @@ entity "**Sensor**" as sensor {
   (FK) monitoring_id : INTEGER
 }
 
-entity "**Location**" as location {
+entity "**Locations**" as location {
   (PK) location_id : INTEGER
   --
   location_name : VARCHAR(50)
@@ -92,10 +92,10 @@ monitoring          ||--|{ tempMon
 monitoring          ||--|{ secMon
 tempMon             ||--|| currTemp            : contains
 secMon              ||--|| currSec             : contains
-monitoring          ||--|{ sensor              : uses
-location            ||--o{ sensor              : contains
+monitorings          ||--|{ sensor              : uses
+locations            ||--o{ sensor              : contains
 monitoring          ||--o{ notif               : generates
 user                ||--o{ notif               : receives
-user                ||--o{ location            : owns
+user                ||--o{ locations           : owns
 
 @enduml
