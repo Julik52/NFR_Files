@@ -28,7 +28,6 @@ entity "МоніторингТемператури" as tempMon {
   --
   нижня_межа : NUMERIC(5,2)
   верхня_межа : NUMERIC(5,2)
-  одиниця : VARCHAR(10)
   (FK) monitoring_id : INTEGER
   (FK) sensor_id : INTEGER
 }
