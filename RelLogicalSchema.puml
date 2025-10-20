@@ -83,6 +83,7 @@ entity "Локація" as location {
   тип_локації : VARCHAR(30)
   будівля : VARCHAR(50)
   поверх : INTEGER
+  (FK) user_id : INTEGER
 }
 
 ' --- Зв’язки ---
@@ -95,5 +96,6 @@ monitoring ||--|{ sensor : використовує
 location ||--o{ sensor : містить
 monitoring ||--o{ notif : генерує
 user ||--o{ notif : отримує
+user ||--o{ location : володіє
 
 @enduml
