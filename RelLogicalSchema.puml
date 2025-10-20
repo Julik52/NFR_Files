@@ -89,8 +89,8 @@ entity "Локація" as location {
 user ||--o{ monitoring : створює
 monitoring ||--|{ tempMon
 monitoring ||--|{ secMon
-tempMon ||--|| currTemp
-secMon ||--|| currSec
+tempMon ||--|| currTemp : містить
+secMon ||--|| currSec : містить
 monitoring ||--|{ sensor : використовує
 location ||--o{ sensor : містить
 monitoring ||--o{ notif : генерує
