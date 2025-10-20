@@ -13,8 +13,8 @@ entity "**User**" as user {
   last_login : TIMESTAMP
 }
 
-entity "**Monitorings**" as monitoring {
-  (PK) monitoring_id : INTEGER
+entity "**Monitorings**" as monitorings {
+  (PK) monitorings_id : INTEGER
   --
   monitoring_name : VARCHAR(100)
   status : VARCHAR(30)
@@ -28,7 +28,7 @@ entity "**TemperatureMonitoring**" as tempMon {
   --
   lower_limit : NUMERIC(5,2)
   upper_limit : NUMERIC(5,2)
-  (FK) monitoring_id : INTEGER
+  (FK) monitorings_id : INTEGER
 }
 
 entity "**SecurityMonitoring**" as secMon {
@@ -36,7 +36,7 @@ entity "**SecurityMonitoring**" as secMon {
   --
   risk_priority : VARCHAR(30)
   risk_types : VARCHAR(50)
-  (FK) monitoring_id : INTEGER
+  (FK) monitorings_id : INTEGER
 }
 
 entity "**CurrentTemperature**" as currTemp {
@@ -61,7 +61,7 @@ entity "**Notification**" as notif {
   message : VARCHAR(255)
   date_time : TIMESTAMP
   event_category : VARCHAR(50)
-  (FK) monitoring_id : INTEGER
+  (FK) monitorings_id : INTEGER
   (FK) user_id : INTEGER
 }
 
@@ -72,12 +72,12 @@ entity "**Sensor**" as sensor {
   sensor_type : VARCHAR(30)
   manufacturer : VARCHAR(50)
   model : VARCHAR(50)
-  (FK) location_id : INTEGER
-  (FK) monitoring_id : INTEGER
+  (FK) locations_id : INTEGER
+  (FK) monitorings_id : INTEGER
 }
 
-entity "**Locations**" as location {
-  (PK) location_id : INTEGER
+entity "**Locations**" as locations {
+  (PK) locations_id : INTEGER
   --
   location_name : VARCHAR(50)
   location_type : VARCHAR(30)
@@ -87,14 +87,14 @@ entity "**Locations**" as location {
 }
 
 ' --- Relationships ---
-user                ||--o{ monitoring          : creates
-monitoring          ||--|{ tempMon
-monitoring          ||--|{ secMon
+user                ||--o{ monitorings          : creates
+monitorings          ||--|{ tempMon
+monitorings          ||--|{ secMon
 tempMon             ||--|| currTemp            : contains
 secMon              ||--|| currSec             : contains
 monitorings          ||--|{ sensor              : uses
 locations            ||--o{ sensor              : contains
-monitoring          ||--o{ notif               : generates
+monitorings          ||--o{ notif               : generates
 user                ||--o{ notif               : receives
 user                ||--o{ locations           : owns
 
