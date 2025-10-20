@@ -28,7 +28,6 @@ entity "МоніторингТемператури" as tempMon {
   --
   нижня_межа : NUMERIC(5,2)
   верхня_межа : NUMERIC(5,2)
-  одиниця : VARCHAR(10)
   (FK) monitoring_id : INTEGER
 }
 
@@ -36,7 +35,7 @@ entity "МоніторингБезпеки" as secMon {
   (PK) security_monitoring_id : INTEGER
   --
   пріоритет_ризиків : VARCHAR(30)
-  типи_ризику : TEXT
+  типи_ризику : VARCHAR(50)
   (FK) monitoring_id : INTEGER
 }
 
@@ -59,7 +58,7 @@ entity "ПоточнийСтанБезпеки" as currSec {
 entity "Сповіщення" as notif {
   (PK) notif_id : INTEGER
   --
-  повідомлення : TEXT
+  повідомлення : VARCHAR(255)
   дата_і_час : TIMESTAMP
   категорія_події : VARCHAR(50)
   (FK) monitoring_id : INTEGER
@@ -78,7 +77,7 @@ entity "Датчик" as sensor {
 }
 
 entity "Локація" as location {
-  (PK) location_id : INTEGER
+  (PK) location_id : SERIAL
   --
   назва_локації : VARCHAR(50)
   тип_локації : VARCHAR(30)
