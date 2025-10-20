@@ -1,101 +1,76 @@
 @startuml
-title Реляційна модель системи моніторингу
-
+skinparam classAttributeIconSize 1
 hide circle
 
-entity "Користувач" as user {
-  (PK) user_id : INTEGER 
-  --
-  ім’я : VARCHAR(50)
-  прізвище : VARCHAR(50)
-  електронна_адреса : VARCHAR(100)
-  номер_телефону : VARCHAR(20)
-  останній_вхід : TIMESTAMP
+class User {
+    +first_name
+    +last_name
+    +email
+    +phone_number
+    +last_login
 }
 
-entity "Моніторинг" as monitoring {
-  (PK) monitoring_id : INTEGER
-  --
-  назва_моніторингу : VARCHAR(100)
-  статус : VARCHAR(30)
-  дата_встановлення : DATE
-  частота_збору_даних : INTERVAL
-  (FK) user_id : INTEGER
+class Monitoring {
+    +monitoring_name
+    +status
+    +installation_date
+    +data_collection_frequency
 }
 
-entity "МоніторингТемператури" as tempMon {
-  (PK) temp_monitoring_id : INTEGER
-  --
-  нижня_межа : NUMERIC(5,2)
-  верхня_межа : NUMERIC(5,2)
-  (FK) monitoring_id : INTEGER
+class TemperatureMonitoring {
+    +lower_limit
+    +upper_limit
 }
 
-entity "МоніторингБезпеки" as secMon {
-  (PK) security_monitoring_id : INTEGER
-  --
-  пріоритет_ризиків : VARCHAR(30)
-  типи_ризику : VARCHAR(50)
-  (FK) monitoring_id : INTEGER
+class SecurityMonitoring {
+    +risk_priority
+    +risk_types
 }
 
-entity "ПоточнаТемпература" as currTemp {
-  (PK) curr_temp_id : INTEGER
-  --
-  значення : NUMERIC(5,2)
-  останнє_оновлення : TIMESTAMP
-  (FK) temp_monitoring_id : INTEGER
+class CurrentTemperature {
+    +value
+    +last_update
 }
 
-entity "ПоточнийСтанБезпеки" as currSec {
-  (PK) curr_sec_id : INTEGER
-  --
-  загальний_статус : VARCHAR(30)
-  останнє_оновлення : TIMESTAMP
-  (FK) security_monitoring_id : INTEGER
+class CurrentSecurityStatus {
+    +overall_status
+    +last_update
 }
 
-entity "Сповіщення" as notif {
-  (PK) notif_id : INTEGER
-  --
-  повідомлення : VARCHAR(255)
-  дата_і_час : TIMESTAMP
-  категорія_події : VARCHAR(50)
-  (FK) monitoring_id : INTEGER
-  (FK) user_id : INTEGER
+class Notification {
+    +message
+    +datetime
+    +event_category
 }
 
-entity "Датчик" as sensor {
-  (PK) sensor_id : INTEGER
-  --
-  назва : VARCHAR(50)
-  тип : VARCHAR(30)
-  виробник : VARCHAR(50)
-  модель : VARCHAR(50)
-  (FK) location_id : INTEGER
-  (FK) monitoring_id : INTEGER
+class Sensor {
+    +name
+    +type
+    +manufacturer
+    +model
 }
 
-entity "Локація" as location {
-  (PK) location_id : SERIAL
-  --
-  назва_локації : VARCHAR(50)
-  тип_локації : VARCHAR(30)
-  будівля : VARCHAR(50)
-  поверх : INTEGER
-  (FK) user_id : INTEGER
+class Location {
+    +location_name
+    +location_type
+    +building
+    +floor
 }
 
-' --- Зв’язки ---
-user ||--o{ monitoring : створює
-monitoring ||--|{ tempMon
-monitoring ||--|{ secMon
-tempMon ||--|| currTemp : містить
-secMon ||--|| currSec : містить
-monitoring ||--|{ sensor : використовує
-location ||--o{ sensor : містить
-monitoring ||--o{ notif : генерує
-user ||--o{ notif : отримує
-user ||--o{ location : володіє
+' --- Relationships ---
+User "1" --> "0..*" Location : owns
+Location "1" *-- "0..*" Sensor : contains
+
+User "1" --> "0..*" Monitoring : creates/manages
+Monitoring <|-- TemperatureMonitoring
+Monitoring <|-- SecurityMonitoring
+
+TemperatureMonitoring "1" *-- "1" CurrentTemperature : contains
+Monitoring "1" --> "1..*" Sensor : uses
+
+SecurityMonitoring "1" *-- "1" CurrentSecurityStatus : reflects
+
+Monitoring "1" --> "0..*" Notification : generates
+User "1" <-- "0..*" Notification : receives
 
 @enduml
