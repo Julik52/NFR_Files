@@ -10,7 +10,7 @@ class User {
     +last_login
 }
 
-class Monitoring {
+class Monitorings {
     +monitoring_name
     +status
     +installation_date
@@ -50,7 +50,7 @@ class Sensor {
     +model
 }
 
-class Location {
+class Locations {
     +location_name
     +location_type
     +building
@@ -58,19 +58,19 @@ class Location {
 }
 
 ' --- Relationships ---
-User "1" --> "0..*" Location : owns
-Location "1" *-- "0..*" Sensor : contains
+User "1" --> "0..*" Locations : owns
+Locations "1" *-- "0..*" Sensor : contains
 
-User "1" --> "0..*" Monitoring : creates/manages
-Monitoring <|-- TemperatureMonitoring
-Monitoring <|-- SecurityMonitoring
+User "1" --> "0..*" Monitorings : creates/manages
+Monitorings <|-- TemperatureMonitoring
+Monitorings <|-- SecurityMonitoring
 
 TemperatureMonitoring "1" *-- "1" CurrentTemperature : contains
-Monitoring "1" --> "1..*" Sensor : uses
+Monitorings "1" --> "1..*" Sensor : uses
 
 SecurityMonitoring "1" *-- "1" CurrentSecurityStatus : reflects
 
-Monitoring "1" --> "0..*" Notification : generates
+Monitorings "1" --> "0..*" Notification : generates
 User "1" <-- "0..*" Notification : receives
 
 @enduml
