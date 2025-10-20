@@ -28,8 +28,8 @@ entity "МоніторингТемператури" as tempMon {
   --
   нижня_межа : NUMERIC(5,2)
   верхня_межа : NUMERIC(5,2)
+  одиниця : VARCHAR(10)
   (FK) monitoring_id : INTEGER
-  (FK) sensor_id : INTEGER
 }
 
 entity "МоніторингБезпеки" as secMon {
@@ -74,10 +74,11 @@ entity "Датчик" as sensor {
   виробник : VARCHAR(50)
   модель : VARCHAR(50)
   (FK) location_id : INTEGER
+  (FK) monitoring_id : INTEGER
 }
 
 entity "Локація" as location {
-  (PK) location_id : SERIAL
+  (PK) location_id : INTEGER 
   --
   назва_локації : VARCHAR(50)
   тип_локації : VARCHAR(30)
@@ -91,10 +92,9 @@ monitoring ||--|{ tempMon
 monitoring ||--|{ secMon
 tempMon ||--|| currTemp
 secMon ||--|| currSec
-tempMon }o--|| sensor
-secMon }o--o{ sensor
-location ||--o{ sensor
-monitoring ||--o{ notif
-user ||--o{ notif
+monitoring ||--o{ sensor : використовує
+location ||--o{ sensor : містить
+monitoring ||--o{ notif : генерує
+user ||--o{ notif : отримує
 
 @enduml
