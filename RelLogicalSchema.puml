@@ -78,7 +78,7 @@ entity "Датчик" as sensor {
 }
 
 entity "Локація" as location {
-  (PK) location_id : INTEGER 
+  (PK) location_id : INTEGER
   --
   назва_локації : VARCHAR(50)
   тип_локації : VARCHAR(30)
@@ -92,7 +92,7 @@ monitoring ||--|{ tempMon
 monitoring ||--|{ secMon
 tempMon ||--|| currTemp
 secMon ||--|| currSec
-monitoring ||--o{ sensor : використовує
+monitoring ||--|{ sensor : використовує
 location ||--o{ sensor : містить
 monitoring ||--o{ notif : генерує
 user ||--o{ notif : отримує
